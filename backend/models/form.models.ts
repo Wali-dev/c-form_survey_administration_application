@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../configs/sequalize";
-import User from "./user.models"; // Make sure the sequelize instance is correctly imported
+import User from "./user.models";
 
 // Form Model
 class Form extends Model {
@@ -30,8 +30,8 @@ Form.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: User, // Refers to the User model
-                key: "id",  // Foreign key
+                model: User,
+                key: "id",
             },
         },
     },
@@ -44,12 +44,12 @@ Form.init(
 );
 
 User.hasMany(Form, {
-    foreignKey: "userId", // The field in the Form model that links to User
-    onDelete: "CASCADE",   // If a User is deleted, all associated forms will be deleted
+    foreignKey: "userId",
+    onDelete: "CASCADE",
 });
 
 Form.belongsTo(User, {
-    foreignKey: "userId",   // The field in the Form model that links to User
+    foreignKey: "userId",
 });
 
 // FormField Model
@@ -61,8 +61,8 @@ class FormField extends Model {
     public placeholder!: string;
     public isRequired!: boolean;
     public defaultValue!: string;
-    public options!: string | null; // For options like in Dropdown Select or Radio Buttons
-    public order!: number; // To manage the reordering of fields
+    public options!: string | null;
+    public order!: number;
     public createdAt!: Date;
     public updatedAt!: Date;
 }
@@ -78,15 +78,15 @@ FormField.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: Form, // Correctly references the Form model
-                key: "id",   // Foreign key
+                model: Form,
+                key: "id",
             },
         },
         fieldType: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
-                isIn: [['text', 'number', 'email', 'date', 'checkbox', 'dropdown', 'radio']], // Allowed field types
+                isIn: [['text', 'number', 'email', 'date', 'checkbox', 'dropdown', 'radio']],
             },
         },
         label: {
@@ -106,13 +106,13 @@ FormField.init(
             allowNull: true,
         },
         options: {
-            type: DataTypes.JSON, // Store options as JSON for dropdown/radio choices
+            type: DataTypes.JSON,
             allowNull: true,
         },
         order: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            defaultValue: 0, // To handle the field order
+            defaultValue: 0,
         },
     },
     {
@@ -123,28 +123,30 @@ FormField.init(
     }
 );
 
-// Define the relationship between Form and FormField (One-to-Many)
+
 Form.hasMany(FormField, {
-    foreignKey: "formId",  // The field in FormField model that links to Form
-    onDelete: "CASCADE",    // If a Form is deleted, all associated form fields will be deleted
+    foreignKey: "formId",
+    as: "formFields",
+    onDelete: "CASCADE",
 });
 
 FormField.belongsTo(Form, {
-    foreignKey: "formId",   // The field in FormField model that links to Form
+    foreignKey: "formId",
+    as: "form",
 });
 
 
 // const syncDatabase = async () => {
 //     try {
 //         // Synchronize all models that are defined
-//         await sequelize.sync({ alter: true }); // This will automatically alter the database to match the models
+//         await sequelize.sync({ alter: true }); 
 //         console.log('Database synced successfully.');
 //     } catch (error) {
 //         console.error('Error syncing database:', error);
 //     }
 // };
 
-// // Call the sync function to sync models with the database
+
 // syncDatabase();
 
 export { Form, FormField };
