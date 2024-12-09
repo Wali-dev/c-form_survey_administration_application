@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-// import userRoute from "./userRoute";
+import userRoute from "./user.route";
 // import linksRoute from "./linkRoute";
 // import clicksRoute from "./clickRoute";
 // import profileVisitRoute from "./profileVisitRoute";
@@ -11,7 +11,7 @@ const demo = (req: Request, res: Response) => {
     res.send("This is the resposne route")
 }
 const routers = [
-    // { path: "/user", router: userRoute },
+    { path: "/user", router: userRoute },
     // { path: "/link", router: linksRoute },
     // { path: "/click", router: clicksRoute },
     // { path: "/profilevisit", router: profileVisitRoute },
