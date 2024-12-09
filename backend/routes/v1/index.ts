@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import userRoute from "./user.route";
+import formRoute from "./form.route";
 // import linksRoute from "./linkRoute";
 // import clicksRoute from "./clickRoute";
 // import profileVisitRoute from "./profileVisitRoute";
@@ -12,7 +13,7 @@ const demo = (req: Request, res: Response) => {
 }
 const routers = [
     { path: "/user", router: userRoute },
-    // { path: "/link", router: linksRoute },
+    { path: "/form", router: formRoute },
     // { path: "/click", router: clicksRoute },
     // { path: "/profilevisit", router: profileVisitRoute },
     // { path: "/auth", router: authRoute },
