@@ -1,4 +1,4 @@
-import { createUser as createUserService } from "../services/user.service";
+import { createUser as createUserService, userLogins } from "../services/user.service";
 import { Request, Response } from "express";
 
 const createUser = async (req: Request, res: Response): Promise<void> => {
@@ -16,5 +16,20 @@ const createUser = async (req: Request, res: Response): Promise<void> => {
         res.status(500).send(error);
     }
 };
+const Login = async (req: Request, res: Response): Promise<void> => {
+    const { credential, password } = req.body as { credential: string; password: string };
 
-export { createUser };
+    try {
+        const user = await userLogins(credential, password);
+        if (user) {
+            res.send(user);
+        } else {
+            res.status(500).send("Error Loggin in");
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+};
+
+export { createUser, Login };

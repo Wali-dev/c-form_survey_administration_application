@@ -2,6 +2,7 @@ import User from "../models/user.models";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { Op } from "sequelize";
 
 dotenv.config();
 
@@ -43,5 +44,49 @@ export const createUser = async (
         console.log(error);
         return "Failed to create user";
 
+    }
+};
+
+
+export const userLogins = async (
+    credential: string,
+    password: string
+): Promise<{ status: string; message: string; token?: string } | string> => {
+    try {
+        if (credential && password) {
+            const user = await User.findOne({
+                where: {
+                    [Op.or]: [{ userName: credential }, { email: credential }],
+                },
+            });
+
+            if (user) {
+                const isMatch = await bcrypt.compare(password, user.password);
+
+                if (isMatch) {
+                    const token = jwt.sign({ username: user.username }, JWT_KEY, {
+                        expiresIn: "1d",
+                    });
+
+                    return {
+                        status: "Success",
+                        message: "Login is Successful",
+                        token,
+                    };
+                } else {
+                    return {
+                        status: "Failed",
+                        message: "Email or password does not match",
+                    };
+                }
+            } else {
+                return "User doesn't exist";
+            }
+        } else {
+            return "Username and password are required";
+        }
+    } catch (error) {
+        console.error("Error during login:", error);
+        throw new Error("An error occurred during login");
     }
 };
