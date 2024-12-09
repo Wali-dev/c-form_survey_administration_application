@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import apiRouter from "./routes/v1/index";
 import errorHandler from "./middleware/errorHandler";
+import syncDatabase from './configs/dbConfig';
 
 const app = express();
 
@@ -24,5 +25,7 @@ app.get("/", (req: Request, res: Response) => {
 app.use((req: Request, res: Response) => {
     res.status(404).send("There is no such route");
 });
+
+syncDatabase();
 
 export default app;

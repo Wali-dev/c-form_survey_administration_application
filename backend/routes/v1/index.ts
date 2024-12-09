@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import userRoute from "./user.route";
 import formRoute from "./form.route";
-// import linksRoute from "./linkRoute";
+import responseRoute from "./formResponse.route";
 // import clicksRoute from "./clickRoute";
 // import profileVisitRoute from "./profileVisitRoute";
 // import authRoute from "./authRoute";
@@ -14,7 +14,7 @@ const demo = (req: Request, res: Response) => {
 const routers = [
     { path: "/user", router: userRoute },
     { path: "/form", router: formRoute },
-    // { path: "/click", router: clicksRoute },
+    { path: "/response", router: responseRoute },
     // { path: "/profilevisit", router: profileVisitRoute },
     // { path: "/auth", router: authRoute },
     { path: "/this", router: demo }

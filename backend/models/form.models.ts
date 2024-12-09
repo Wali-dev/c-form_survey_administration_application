@@ -4,11 +4,14 @@ import User from "./user.models";
 
 // Form Model
 class Form extends Model {
+
+
     public id!: number;
     public title!: string;
     public description!: string;
     public createdAt!: Date;
     public updatedAt!: Date;
+
 }
 
 Form.init(
@@ -126,15 +129,14 @@ FormField.init(
 
 Form.hasMany(FormField, {
     foreignKey: "formId",
-    as: "formFields",
     onDelete: "CASCADE",
+    as: "formFields",
 });
 
 FormField.belongsTo(Form, {
     foreignKey: "formId",
     as: "form",
 });
-
 
 // const syncDatabase = async () => {
 //     try {
