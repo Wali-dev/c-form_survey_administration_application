@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { submitFormResponseService } from "../services/formResponse.service"
+import { getFormResponsesService, submitFormResponseService } from "../services/formResponse.service"
 
 const submitFormResponse = async (req: Request, res: Response): Promise<void> => {
     const { username, formId, responses } = req.body as {
@@ -28,4 +28,25 @@ const submitFormResponse = async (req: Request, res: Response): Promise<void> =>
     }
 };
 
-export { submitFormResponse };
+
+
+const getFormResponses = async (req: Request, res: Response): Promise<void> => {
+    const { formId } = req.params;
+
+    try {
+        const responses = await getFormResponsesService(Number(formId));
+
+        if (responses && responses.length > 0) {
+            res.status(200).json(responses);
+        } else {
+            res.status(404).json({ message: "No responses found for this form." });
+        }
+    } catch (error) {
+        console.error("Error fetching form responses:", error);
+        res.status(500).json({ message: "Internal server error." });
+    }
+};
+
+
+
+export { submitFormResponse, getFormResponses };

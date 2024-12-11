@@ -1,5 +1,5 @@
 import express from "express";
-import { submitFormResponse } from "../../controllers/formResponse.controller";
+import { getFormResponses, submitFormResponse } from "../../controllers/formResponse.controller";
 
 
 
@@ -8,6 +8,7 @@ import { submitFormResponse } from "../../controllers/formResponse.controller";
 const router = express.Router();
 
 router.post("/create", submitFormResponse);
+router.get("/:formId", getFormResponses);
 
 
 

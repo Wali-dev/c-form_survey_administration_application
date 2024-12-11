@@ -15,6 +15,3 @@ const syncDatabase = async () => {
 
 export default syncDatabase;
 
-// In your main server file (e.g., server.ts or app.ts)
-// import syncDatabase from './path/to/this/file';
-// syncDatabase();

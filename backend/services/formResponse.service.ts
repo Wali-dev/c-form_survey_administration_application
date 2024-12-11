@@ -38,4 +38,19 @@ const submitFormResponseService = async (
     }
 };
 
-export { submitFormResponseService };
+
+const getFormResponsesService = async (formId: number): Promise<ResponseData[]> => {
+    try {
+        const responses = await ResponseData.findAll({
+            where: { formId },
+        });
+
+        return responses;
+    } catch (error) {
+        console.error("Error fetching responses from the database:", error);
+        throw new Error("Error fetching responses.");
+    }
+};
+
+
+export { submitFormResponseService, getFormResponsesService };
