@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus, Trash2, GripVertical } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-// Types matching backend schema
 type FieldType = 'text' | 'number' | 'email' | 'date' | 'checkbox' | 'dropdown' | 'radio';
 
 interface FormField {
@@ -40,30 +39,30 @@ const FormEditPage: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    //hardcoded variables
+
     const username = "cornell";
     useEffect(() => {
         const fetchForm = async () => {
             try {
-                // Fetch user's forms first (assuming we need to get the username)
-                const formsResponse = await fetch(`http://localhost:8000/api/form/${username}`);
+
+                const formsResponse = await fetch(`${import.meta.env.VITE_SERVER}form/${username}`);
                 if (!formsResponse.ok) {
                     throw new Error('Failed to fetch forms');
                 }
                 const forms = await formsResponse.json();
 
-                // Find the specific form by ID
+
                 const form = forms.find((f: Form) => f.id === parseInt(formId || '0'));
 
                 if (!form) {
                     throw new Error('Form not found');
                 }
 
-                // Set form details
+
                 setFormTitle(form.title);
                 setFormDescription(form.description);
 
-                // Map form fields to include a unique id for drag and drop
+
                 const mappedFields = form.formFields.map(field => ({
                     ...field,
                     id: field.id?.toString() || `field-${Date.now()}`
@@ -110,7 +109,7 @@ const FormEditPage: React.FC = () => {
         const [reorderedItem] = reorderedFields.splice(result.source.index, 1);
         reorderedFields.splice(result.destination.index, 0, reorderedItem);
 
-        // Update order
+
         const updatedFields = reorderedFields.map((field, index) => ({
             ...field,
             order: index
@@ -121,7 +120,7 @@ const FormEditPage: React.FC = () => {
 
     const handleSubmit = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/api/form/update/${formId}`, {
+            const response = await fetch(`${import.meta.env.VITE_SERVER}form/update/${formId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -144,7 +143,7 @@ const FormEditPage: React.FC = () => {
 
             if (response.ok) {
                 alert('Form updated successfully!');
-                // navigate('dashboard/home'); // Navigate back to forms list
+
             } else {
                 const errorData = await response.json();
                 alert(`Failed to update form: ${errorData.message}`);
@@ -239,7 +238,7 @@ const FormEditPage: React.FC = () => {
         <div className="container mx-auto p-6">
             <h1 className="text-2xl font-bold mb-6">Edit Form</h1>
 
-            {/* Form Metadata */}
+
             <Card className="mb-6">
                 <CardContent className="grid gap-4">
                     <Input
@@ -258,7 +257,7 @@ const FormEditPage: React.FC = () => {
                 </CardContent>
             </Card>
 
-            {/* Field Type Selection */}
+
             <Card className="mb-6">
                 <CardHeader>
                     <CardTitle>Add Fields</CardTitle>
@@ -276,7 +275,7 @@ const FormEditPage: React.FC = () => {
                 </CardContent>
             </Card>
 
-            {/* Draggable Fields */}
+
             <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="form-fields">
                     {(provided) => (
@@ -306,7 +305,7 @@ const FormEditPage: React.FC = () => {
                 </Droppable>
             </DragDropContext>
 
-            {/* Submit Button */}
+
             <Button
                 onClick={handleSubmit}
                 disabled={!formTitle || fields.length === 0}

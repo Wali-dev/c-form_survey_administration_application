@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus, Trash2, GripVertical } from 'lucide-react';
 
-// Types matching backend schema
+
 type FieldType = 'text' | 'number' | 'email' | 'date' | 'checkbox' | 'dropdown' | 'radio';
 
 interface FormField {
@@ -69,7 +69,7 @@ const FormBuilder: React.FC = () => {
 
     const handleSubmit = async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/form/create', {
+            const response = await fetch(`${import.meta.env.VITE_SERVER}form/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ const FormBuilder: React.FC = () => {
                 body: JSON.stringify({
                     title: formTitle,
                     description: formDescription,
-                    userId: 1, // TODO: Replace with actual user ID
+                    userId: 1,
                     formFields: fields.map(field => ({
                         fieldType: field.fieldType,
                         label: field.label,
@@ -92,7 +92,7 @@ const FormBuilder: React.FC = () => {
 
             if (response.ok) {
                 alert('Form created successfully!');
-                // Reset form or navigate away
+
             } else {
                 alert('Failed to create form');
             }
@@ -178,7 +178,7 @@ const FormBuilder: React.FC = () => {
         <div className="container mx-auto p-6">
             <h1 className="text-2xl font-bold mb-6">Form Builder</h1>
 
-            {/* Form Metadata */}
+
             <Card className="mb-6">
                 <CardContent className="grid gap-4">
                     <Input
@@ -197,7 +197,7 @@ const FormBuilder: React.FC = () => {
                 </CardContent>
             </Card>
 
-            {/* Field Type Selection */}
+
             <Card className="mb-6">
                 <CardHeader>
                     <CardTitle>Add Fields</CardTitle>
@@ -215,7 +215,7 @@ const FormBuilder: React.FC = () => {
                 </CardContent>
             </Card>
 
-            {/* Draggable Fields */}
+
             <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="form-fields">
                     {(provided) => (
@@ -245,7 +245,7 @@ const FormBuilder: React.FC = () => {
                 </Droppable>
             </DragDropContext>
 
-            {/* Submit Button */}
+
             <Button
                 onClick={handleSubmit}
                 disabled={!formTitle || fields.length === 0}

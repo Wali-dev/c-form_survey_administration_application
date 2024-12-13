@@ -39,19 +39,18 @@ const FormsList: React.FC<FormsListProps> = ({ username }) => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  // Fetch forms when component mounts
+
   useEffect(() => {
     const fetchForms = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(`http://localhost:8000/api/form/${username}`);
+        const response = await axios.get(`${import.meta.env.VITE_SERVER}form/${username}`);
         const fetchedForms = response.data;
         setForms(fetchedForms);
 
-        // Fetch response counts for each form
         const countPromises = fetchedForms.map(async (form: Form) => {
           try {
-            const responseCountResponse = await axios.get(`http://localhost:8000/api/response/${form.id}`);
+            const responseCountResponse = await axios.get(`${import.meta.env.VITE_SERVER}response/${form.id}`);
             return { formId: form.id, count: responseCountResponse.data.length };
           } catch (err) {
             console.error(`Failed to fetch responses for form ${form.id}`, err);
@@ -79,10 +78,10 @@ const FormsList: React.FC<FormsListProps> = ({ username }) => {
 
   const handleDeleteForm = async (formId: number) => {
     try {
-      await axios.delete(`http://localhost:8000/api/form/${username}/${formId}`);
-      // Remove the deleted form from the state
+      await axios.delete(`${import.meta.env.VITE_SERVER}form/${username}/${formId}`);
+
       setForms(forms.filter(form => form.id !== formId));
-      // Remove the response count for the deleted form
+
       const newResponseCounts = { ...responseCounts };
       delete newResponseCounts[formId];
       setResponseCounts(newResponseCounts);
@@ -99,7 +98,7 @@ const FormsList: React.FC<FormsListProps> = ({ username }) => {
   const handleShareForm = (formId: number) => {
     const shareUrl = `${window.location.origin}/response/${username}/${formId}`;
 
-    // Copy to clipboard
+
     navigator.clipboard.writeText(shareUrl).then(() => {
       alert('Form share link copied to clipboard!');
     }).catch(err => {
@@ -109,12 +108,12 @@ const FormsList: React.FC<FormsListProps> = ({ username }) => {
 
   const downloadCSV = async (formId: number) => {
     try {
-      // Send request to export CSV
-      const response = await axios.get(`http://localhost:8000/api/response/${formId}/export-csv`, {
-        responseType: 'blob' // Important for file downloads
+
+      const response = await axios.get(`${import.meta.env.VITE_SERVER}response/${formId}/export-csv`, {
+        responseType: 'blob'
       });
 
-      // Create a blob from the response data
+
       const blob = new Blob([response.data], { type: 'text/csv' });
 
       // Create a link element to trigger the download
@@ -126,7 +125,7 @@ const FormsList: React.FC<FormsListProps> = ({ username }) => {
       const filename = `${form?.title || 'form'}_responses_${new Date().toISOString().replace(/:/g, '-')}.csv`;
       link.download = filename;
 
-      // Append to the body, click, and remove
+
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -213,7 +212,7 @@ export default FormsList;
 
 export const FormsPage: React.FC = () => {
   const { authUser } = useAuth();
-  const username = authUser();
+  const username = authUser;
 
   return (
     <div>

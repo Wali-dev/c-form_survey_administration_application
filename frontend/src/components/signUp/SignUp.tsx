@@ -42,7 +42,7 @@ const Signup: React.FC = () => {
         setErrorMessage('');
 
         try {
-            const response = await axios.post('http://localhost:8000/api/user/register', {
+            const response = await axios.post(`${import.meta.env.VITE_SERVER}user/register`, {
                 username,
                 email,
                 password,

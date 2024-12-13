@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
-// Type definitions for form and form fields
+
 interface FormField {
     id: number;
     formId: number;
@@ -31,20 +31,19 @@ const FormResponsePage: React.FC = () => {
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Fetch form data when component mounts
     useEffect(() => {
         const fetchFormData = async () => {
             try {
-                // Fetch form data for the specific username
-                const response = await axios.get(`http://localhost:8000/api/form/${username}`);
 
-                // Find the form with the matching formId
+                const response = await axios.get(`${import.meta.env.VITE_SERVER}form/${username}`);
+
+
                 const selectedForm = response.data.find((f: Form) => f.id === parseInt(formId || '0'));
 
                 if (selectedForm) {
                     setForm(selectedForm);
 
-                    // Initialize form responses with default values
+
                     const initialResponses = selectedForm.formFields.reduce((acc, field) => {
                         acc[field.id] = field.defaultValue || '';
                         return acc;
@@ -65,7 +64,7 @@ const FormResponsePage: React.FC = () => {
         fetchFormData();
     }, [username, formId]);
 
-    // Handle input changes
+
     const handleInputChange = (fieldId: number, value: any) => {
         setFormResponses(prev => ({
             ...prev,
@@ -73,13 +72,12 @@ const FormResponsePage: React.FC = () => {
         }));
     };
 
-    // Handle form submission
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
         setSubmitError(null);
 
-        // Validate required fields
+
         const requiredFields = form?.formFields.filter(f => f.isRequired) || [];
         const missingFields = requiredFields.filter(
             field => !formResponses[field.id] ||
@@ -94,16 +92,16 @@ const FormResponsePage: React.FC = () => {
         }
 
         try {
-            // Submit form response
-            await axios.post(`http://localhost:8000/api/response/create`, {
+
+            await axios.post(`${import.meta.env.VITE_SERVER}response/create`, {
                 formId: parseInt(formId || '0'),
                 username,
                 responses: formResponses
             });
 
-            // Redirect or show success message
+
             alert('Form submitted successfully!');
-            // Optionally: history.push('/success') or similar navigation
+
         } catch (err) {
             setSubmitError('Failed to submit form');
             console.error(err);
@@ -112,7 +110,7 @@ const FormResponsePage: React.FC = () => {
         }
     };
 
-    // Render input based on field type
+
     const renderFormField = (field: FormField) => {
         const value = formResponses[field.id];
 
@@ -205,7 +203,7 @@ const FormResponsePage: React.FC = () => {
         }
     };
 
-    // Render loading or error states
+
     if (isLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
@@ -222,7 +220,7 @@ const FormResponsePage: React.FC = () => {
         );
     }
 
-    // Render the form
+
     return (
         <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
             <div className="relative py-3 sm:max-w-xl sm:mx-auto">

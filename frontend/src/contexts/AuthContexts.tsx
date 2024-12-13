@@ -1,6 +1,6 @@
 import React, { useState, useContext, ReactNode } from "react";
 
-// Define a TypeScript interface for the auth context value
+// Define  typeScript interface 
 interface AuthContextType {
     authUser: any;
     setAuthUser: React.Dispatch<React.SetStateAction<any>>;
@@ -12,7 +12,7 @@ interface AuthContextType {
     logout: () => void;
 }
 
-// Creating context with default values
+
 const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
