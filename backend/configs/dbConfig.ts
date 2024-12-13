@@ -6,7 +6,7 @@ import { ResponseData } from '../models/formResponse.models';
 const syncDatabase = async () => {
     try {
         // Sync all models
-        await sequelize.sync({ force: false }); // Set to true if you want to drop and recreate tables
+        await sequelize.sync({ force: false });
         console.log('Database synchronized successfully');
     } catch (error) {
         console.error('Unable to synchronize database:', error);

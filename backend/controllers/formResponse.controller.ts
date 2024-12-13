@@ -60,7 +60,7 @@ const exportFormResponsesToCsv = async (req: Request, res: Response): Promise<vo
         res.setHeader('Content-Type', 'text/csv');
         res.setHeader('Content-Disposition', `attachment; filename=form_responses_${formId}.csv`);
 
-        // Send the CSV data
+
         res.status(200).send(csvData);
     } catch (error) {
         console.error("Error exporting form responses to CSV:", error);

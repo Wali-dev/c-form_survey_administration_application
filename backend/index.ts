@@ -1,6 +1,6 @@
 import app from "./app";
 import configs from "./configs/config";
-import "./configs/sequalize"; // Import to initialize Sequelize
+import "./configs/sequalize";
 
 const port: number = configs.port;
 

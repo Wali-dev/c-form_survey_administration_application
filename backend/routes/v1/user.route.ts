@@ -6,7 +6,7 @@ import {
 
 } from "../../controllers/user.controller";
 
-//import checkUserAuth from "../middleware/authMiddleware";
+
 
 const router = express.Router();
 

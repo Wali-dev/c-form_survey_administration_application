@@ -11,7 +11,7 @@ const createFormService = async (
     const transaction = await sequelize.transaction();
 
     try {
-        // Step 1: Create the form
+
         const form = await Form.create(
             { title, description, userId },
             { transaction }
@@ -29,7 +29,7 @@ const createFormService = async (
                     defaultValue: field.defaultValue || '',
                     options: field.options || null,
                     order: field.order || 0,
-                }, { transaction }) // Use the same transaction
+                }, { transaction })
             );
 
             // Wait for all form field creations to complete
@@ -41,7 +41,7 @@ const createFormService = async (
 
         return form;
     } catch (error) {
-        // If anything fails, rollback the transaction
+
         await transaction.rollback();
         console.error("Error creating form and fields:", error);
         throw new Error("Error creating form and fields");
@@ -129,7 +129,7 @@ const getFormsByUsernameService = async (username: string): Promise<any> => {
 
 const deleteFormService = async (username: string, formId: number): Promise<boolean> => {
     try {
-        // Find the user by username
+
         const user = await User.findOne({ where: { username } });
 
         if (!user) {
@@ -158,10 +158,10 @@ const deleteFormService = async (username: string, formId: number): Promise<bool
                 transaction,
             });
 
-            // Delete the form
+
             await form.destroy({ transaction });
 
-            // Commit the transaction
+
             await transaction.commit();
             return true;
         } catch (error) {

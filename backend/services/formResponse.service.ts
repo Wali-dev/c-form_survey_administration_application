@@ -8,13 +8,13 @@ const submitFormResponseService = async (
     responses: object
 ): Promise<boolean> => {
     try {
-        // Find the form and its form fields
+
         const form = await Form.findOne({
             where: { id: formId },
             include: [
                 {
                     model: FormField,
-                    as: "formFields",  // Correctly use the alias here
+                    as: "formFields",
                     required: true,
                 },
             ],
@@ -24,14 +24,14 @@ const submitFormResponseService = async (
             throw new Error("Form not found");
         }
 
-        // Save the responses
+
         const response = await ResponseData.create({
             formId: form.id,
             username,
             responses,
         });
 
-        // Return true if the response was successfully saved
+
         return response ? true : false;
     } catch (error) {
         console.error("Error submitting form response:", error);
@@ -54,12 +54,12 @@ const getFormResponsesService = async (formId: number): Promise<ResponseData[]> 
 
 const exportFormResponsesToCsvService = async (formId: number): Promise<string> => {
     try {
-        // Fetch all responses for the given form
+
         const responses = await ResponseData.findAll({
             where: { formId },
         });
 
-        // If no responses found, throw an error
+
         if (!responses || responses.length === 0) {
             throw new Error("No responses found for this form");
         }
@@ -72,13 +72,13 @@ const exportFormResponsesToCsvService = async (formId: number): Promise<string> 
                 ? JSON.parse(response.responses)
                 : response.responses;
 
-            // Create a flat object for CSV export
+
             return {
                 id: response.id,
                 formId: response.formId,
                 username: response.username,
                 ...Object.keys(parsedResponses || {}).reduce((acc, key) => {
-                    // Flatten nested objects if needed
+
                     acc[key] = typeof parsedResponses[key] === 'object'
                         ? JSON.stringify(parsedResponses[key])
                         : parsedResponses[key];

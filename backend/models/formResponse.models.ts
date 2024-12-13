@@ -34,7 +34,7 @@ ResponseData.init(
             },
         },
         responses: {
-            type: DataTypes.TEXT, // Changed from JSONB to TEXT
+            type: DataTypes.TEXT,
             allowNull: false,
             get() {
                 return JSON.parse(this.getDataValue('responses'));

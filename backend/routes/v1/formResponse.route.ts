@@ -11,6 +11,6 @@ const router = express.Router();
 
 router.post("/create", submitFormResponse);
 router.get("/:formId", getFormResponses);
-router.get("/:formId/export-csv", exportFormResponsesToCsv); // New route for CSV export
+router.get("/:formId/export-csv", exportFormResponsesToCsv); // route for CSV export
 
 export default router;

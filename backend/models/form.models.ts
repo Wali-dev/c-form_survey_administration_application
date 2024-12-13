@@ -2,7 +2,7 @@ import { DataTypes, Model } from "sequelize";
 import sequelize from "../configs/sequalize";
 import User from "./user.models";
 
-// Form Model
+
 class Form extends Model {
 
 
@@ -55,7 +55,7 @@ Form.belongsTo(User, {
     foreignKey: "userId",
 });
 
-// FormField Model
+
 class FormField extends Model {
     public id!: number;
     public formId!: number;
