@@ -17,7 +17,7 @@ const routers = [
     { path: "/response", router: responseRoute },
     // { path: "/profilevisit", router: profileVisitRoute },
     // { path: "/auth", router: authRoute },
-    { path: "/this", router: demo }
+
 ];
 
 routers.forEach((routerObject) => {

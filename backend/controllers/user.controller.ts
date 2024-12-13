@@ -17,10 +17,10 @@ const createUser = async (req: Request, res: Response): Promise<void> => {
     }
 };
 const Login = async (req: Request, res: Response): Promise<void> => {
-    const { credential, password } = req.body as { credential: string; password: string };
+    const { identifier, password } = req.body as { identifier: string; password: string };
 
     try {
-        const user = await userLogins(credential, password);
+        const user = await userLogins(identifier, password);
         if (user) {
             res.send(user);
         } else {

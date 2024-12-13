@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { getFormResponsesService, submitFormResponseService } from "../services/formResponse.service"
+import {
+    getFormResponsesService,
+    submitFormResponseService,
+    exportFormResponsesToCsvService
+} from "../services/formResponse.service";
 
 const submitFormResponse = async (req: Request, res: Response): Promise<void> => {
     const { username, formId, responses } = req.body as {
@@ -28,8 +32,6 @@ const submitFormResponse = async (req: Request, res: Response): Promise<void> =>
     }
 };
 
-
-
 const getFormResponses = async (req: Request, res: Response): Promise<void> => {
     const { formId } = req.params;
 
@@ -47,6 +49,32 @@ const getFormResponses = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
+const exportFormResponsesToCsv = async (req: Request, res: Response): Promise<void> => {
+    const { formId } = req.params;
 
+    try {
+        // Generate CSV
+        const csvData = await exportFormResponsesToCsvService(Number(formId));
 
-export { submitFormResponse, getFormResponses };
+        // Set headers for CSV download
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', `attachment; filename=form_responses_${formId}.csv`);
+
+        // Send the CSV data
+        res.status(200).send(csvData);
+    } catch (error) {
+        console.error("Error exporting form responses to CSV:", error);
+
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        res.status(500).json({
+            message: "Error exporting form responses to CSV",
+            error: errorMessage
+        });
+    }
+};
+
+export {
+    submitFormResponse,
+    getFormResponses,
+    exportFormResponsesToCsv
+};

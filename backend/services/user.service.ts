@@ -51,7 +51,7 @@ export const createUser = async (
 export const userLogins = async (
     credential: string,
     password: string
-): Promise<{ status: string; message: string; token?: string } | string> => {
+): Promise<{ status: string; message: string; token?: string; username?: string } | string> => {
     try {
         if (credential && password) {
             const user = await User.findOne({
@@ -71,6 +71,7 @@ export const userLogins = async (
                     return {
                         status: "Success",
                         message: "Login is Successful",
+                        username: user.username,
                         token,
                     };
                 } else {
